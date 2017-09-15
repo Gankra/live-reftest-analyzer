@@ -8,7 +8,7 @@
     .hidesource div.source { display: none; }
 
     iframe { width: 100%; height: 40em; padding: 0px; margin: 0px; border: none; }
-    
+
 </style>
 </head>
 
@@ -17,12 +17,12 @@
   <button id="submit" onclick="submit()">Submit</button>
 
   <div id="content"></div>
-  
+
 <script>
 
 /*
 
-Parsing things like this 
+Parsing things like this
 
 !   file:///builds/worker/workspace/build/tests/reftest/tests/layout/reftests/position-sticky/inline-3.html == file:///builds/worker/workspace/build/tests/reftest/tests/layout/reftests/position-sticky/inline-3-ref.html
 */
@@ -37,7 +37,7 @@ function submit() {
         let pair = document.createElement("div");
         pair.classList.add("pair");
         pair.classList.add("hidesource");
-        
+
         let source = document.createElement("button");
         source.innerHTML = "source";
         source.onclick = function() {
@@ -51,7 +51,7 @@ function submit() {
         pair.appendChild(title);
 
         processReftest(test, pair);
-        
+
         content.appendChild(pair);
     }
 }
@@ -64,13 +64,13 @@ function processReftest(input, targetElem) {
       halves = input.split(" != ");
     }
 
-    
+
     let first = localizePath(halves[0], targetElem);
     let second = localizePath(halves[1], targetElem);
 }
 
 function localizePath(input, targetElem) {
-    // example file:///builds/worker/workspace/build/tests/reftest/tests/layout/reftests/position-sticky/inline-3.html 
+    // example file:///builds/worker/workspace/build/tests/reftest/tests/layout/reftests/position-sticky/inline-3.html
     let commonPrefix = "file:///builds/worker/workspace/build/tests/reftest/tests/";
     let parts = input.split(commonPrefix);
     var suffix;
@@ -83,7 +83,7 @@ function localizePath(input, targetElem) {
             console.log("unparseable: "+input);
             suffix = "about:blank";
         } else {
-            suffix = "layout/reftests/" + parts[1].split("/").slice(3).join("/"); 
+            suffix = "layout/reftests/" + parts[1].split("/").slice(3).join("/");
         }
     } else {
         suffix = parts[1];
@@ -98,8 +98,8 @@ function localizePath(input, targetElem) {
     let iframe = document.createElement("iframe");
     iframe.onload = function() {
        let sourceString = "" + iframe.contentDocument.documentElement.outerHTML;
-       source.textContent = sourceString; 
-       // textContent = iframe.contentWindow.document.innerHTML; 
+       source.textContent = sourceString;
+       // textContent = iframe.contentWindow.document.innerHTML;
     }
 
     iframe.src = suffix;
