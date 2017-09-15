@@ -1,6 +1,6 @@
 # Live Gecko Reftest Analyzer
 
-A tool for looking at failed reftests live. 
+A tool for looking at failed gecko reftests live. 
 
 For instance, say you run a try build, and get the following in the reftest analyzer:
 

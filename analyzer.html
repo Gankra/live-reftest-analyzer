@@ -4,14 +4,13 @@
 <style>
     body { width: 100%; margin: 0; }
     .pair { width: 100%; }
-    .test { width: 40%; display: inline-block; }
+    .test { width: 45%; display: inline-block; margin: 2px; }
     .visual-difference .test {
         width: 100%; position: absolute; mix-blend-mode: difference; background: white;
     }
     .hidesource div.source { display: none; }
 
-    iframe { width: 100%; height: 40em; padding: 0px; margin: 0px; border: none; }
-
+    iframe { width: 100%; min-height: 10em; }
 </style>
 </head>
 
@@ -109,7 +108,7 @@ function localizePath(input, targetElem) {
         suffix = parts[1];
     }
 
-    let wrapper = document.createElement("div");
+    var wrapper = document.createElement("div");
     wrapper.classList.add("test");
 
     var source = document.createElement("div");
@@ -118,8 +117,8 @@ function localizePath(input, targetElem) {
     let iframe = document.createElement("iframe");
     iframe.onload = function() {
        let sourceString = "" + iframe.contentDocument.documentElement.outerHTML;
-       source.textContent = sourceString;
-       // textContent = iframe.contentWindow.document.innerHTML;
+       iframe.height = iframe.contentDocument.body.scrollHeight + 80;
+       source.textContent = sourceString; 
     }
 
     iframe.src = suffix;
