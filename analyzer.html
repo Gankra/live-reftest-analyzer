@@ -5,6 +5,9 @@
     body { width: 100%; margin: 0; }
     .pair { width: 100%; }
     .test { width: 40%; display: inline-block; }
+    .visual-difference .test {
+        width: 100%; position: absolute; mix-blend-mode: difference; background: white;
+    }
     .hidesource div.source { display: none; }
 
     iframe { width: 100%; height: 40em; padding: 0px; margin: 0px; border: none; }
@@ -49,6 +52,17 @@ function submit() {
         }
         showSourceLabel.appendChild(showSource);
         controls.appendChild(showSourceLabel);
+
+        let showDifferenceLabel = document.createElement("label");
+        showDifferenceLabel.textContent = "Show visual difference";
+        let showDifference = document.createElement("input");
+        showDifference.type = "checkbox";
+        showDifference.onchange = function() {
+            pair.classList.toggle("visual-difference", showDifference.checked);
+        }
+        showDifferenceLabel.appendChild(showDifference);
+        controls.appendChild(showDifferenceLabel);
+
         pair.appendChild(controls);
 
         let title = document.createElement("div");
