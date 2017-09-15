@@ -38,12 +38,18 @@ function submit() {
         pair.classList.add("pair");
         pair.classList.add("hidesource");
 
-        let source = document.createElement("button");
-        source.innerHTML = "source";
-        source.onclick = function() {
-            pair.classList.toggle("hidesource");
+        let controls = document.createElement("div");
+
+        let showSourceLabel = document.createElement("label");
+        showSourceLabel.textContent = "Show Source";
+        let showSource = document.createElement("input");
+        showSource.type = "checkbox";
+        showSource.onchange = function() {
+            pair.classList.toggle("hidesource", !showSource.checked);
         }
-        pair.appendChild(source);
+        showSourceLabel.appendChild(showSource);
+        controls.appendChild(showSourceLabel);
+        pair.appendChild(controls);
 
         let title = document.createElement("div");
         title.classList.add("testname");
