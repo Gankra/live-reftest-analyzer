@@ -1,0 +1,115 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    body { width: 100%;}
+    .pair { width: 100%; }
+    .test { width: 40%; display: inline-block; }
+    .hidesource div.source { display: none; }
+
+    iframe { width: 100%; height: 40em; padding: 0px; margin: 0px; border: none; }
+    
+</style>
+</head>
+
+<body>
+  <textarea id="tests"></textarea>
+  <button id="submit" onclick="submit()">Submit</button>
+
+  <div id="content"></div>
+  
+<script>
+
+/*
+
+Parsing things like this 
+
+!   file:///builds/worker/workspace/build/tests/reftest/tests/layout/reftests/position-sticky/inline-3.html == file:///builds/worker/workspace/build/tests/reftest/tests/layout/reftests/position-sticky/inline-3-ref.html
+*/
+
+function submit() {
+    let input = document.getElementById("tests").value;
+    let tests = input.split("\n");
+
+    let content = document.getElementById("content");
+    content.innerHTML = "";
+    for (test of tests) {
+        let pair = document.createElement("div");
+        pair.classList.add("pair");
+        pair.classList.add("hidesource");
+        
+        let source = document.createElement("button");
+        source.innerHTML = "source";
+        source.onclick = function() {
+            pair.classList.toggle("hidesource");
+        }
+        pair.appendChild(source);
+
+        let title = document.createElement("div");
+        title.classList.add("testname");
+        title.innerHTML = test;
+        pair.appendChild(title);
+
+        processReftest(test, pair);
+        
+        content.appendChild(pair);
+    }
+}
+
+function processReftest(input, targetElem) {
+
+    var halves = input.split(" == ");
+    let shouldBeEqual = (halves.length == 2);
+    if (!shouldBeEqual) {
+      halves = input.split(" != ");
+    }
+
+    
+    let first = localizePath(halves[0], targetElem);
+    let second = localizePath(halves[1], targetElem);
+}
+
+function localizePath(input, targetElem) {
+    // example file:///builds/worker/workspace/build/tests/reftest/tests/layout/reftests/position-sticky/inline-3.html 
+    let commonPrefix = "file:///builds/worker/workspace/build/tests/reftest/tests/";
+    let parts = input.split(commonPrefix);
+    var suffix;
+
+    if (parts.length == 1) {
+        // example http://localhost:46691/1505412828906/601/text-shadow/blur-opacity-ref.html
+        let localHostPrefix = "://localhost:";
+        let parts = input.split(localHostPrefix);
+        if (parts.length == 1) {
+            console.log("unparseable: "+input);
+            suffix = "about:blank";
+        } else {
+            suffix = "layout/reftests/" + parts[1].split("/").slice(3).join("/"); 
+        }
+    } else {
+        suffix = parts[1];
+    }
+
+    let wrapper = document.createElement("div");
+    wrapper.classList.add("test");
+
+    var source = document.createElement("div");
+    source.classList.add("source");
+
+    let iframe = document.createElement("iframe");
+    iframe.onload = function() {
+       let sourceString = "" + iframe.contentDocument.documentElement.outerHTML;
+       source.textContent = sourceString; 
+       // textContent = iframe.contentWindow.document.innerHTML; 
+    }
+
+    iframe.src = suffix;
+    wrapper.appendChild(iframe);
+    wrapper.appendChild(source);
+    targetElem.appendChild(wrapper);
+}
+
+
+
+</script>
+</body>
+</html>
