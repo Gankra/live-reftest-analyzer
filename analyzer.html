@@ -5,8 +5,11 @@
     body { width: 100%; margin: 0; }
     .pair { width: 100%; }
     .test { width: 45%; display: inline-block; margin: 2px; }
+    .visual-difference .test.first {
+        position: absolute; 
+    }
     .visual-difference .test {
-        width: 100%; position: absolute; mix-blend-mode: difference; background: white;
+        mix-blend-mode: difference; background: white; width: 100%;
     }
     .hidesource div.source { display: none; }
 
@@ -84,11 +87,11 @@ function processReftest(input, targetElem) {
     }
 
 
-    let first = localizePath(halves[0], targetElem);
+    let first = localizePath(halves[0], targetElem, true);
     let second = localizePath(halves[1], targetElem);
 }
 
-function localizePath(input, targetElem) {
+function localizePath(input, targetElem, isFirst) {
     // example file:///builds/worker/workspace/build/tests/reftest/tests/layout/reftests/position-sticky/inline-3.html
     let commonPrefix = "file:///builds/worker/workspace/build/tests/reftest/tests/";
     let parts = input.split(commonPrefix);
@@ -110,6 +113,11 @@ function localizePath(input, targetElem) {
 
     var wrapper = document.createElement("div");
     wrapper.classList.add("test");
+    if (isFirst) {
+        wrapper.classList.add("first");
+    } else {
+        wrapper.classList.add("second");
+    }
 
     var source = document.createElement("div");
     source.classList.add("source");
